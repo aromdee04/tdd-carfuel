@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using CarFuel.DataAccess;
+using System.Net;
 
 namespace CarFuel.Controllers
 {
@@ -54,8 +55,12 @@ namespace CarFuel.Controllers
             return RedirectToAction("Index");
         }
 
-        public ActionResult Details(Guid Id)
+        public ActionResult Details(Guid? Id)
         {
+            if (Id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadGateway);
+            }
             var userId = new Guid(User.Identity.GetUserId());
             var c = carService.GetCarsByMember(userId).SingleOrDefault(x => x.Id == Id);
 
