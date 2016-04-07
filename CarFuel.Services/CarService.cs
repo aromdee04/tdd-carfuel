@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CarFuel.Services
 {
-    public class CarService
+    public class CarService : ICarService
     {
         public ICarDb CarDb { get; }
         
