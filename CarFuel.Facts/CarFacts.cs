@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 using Should;
+using CNX.Shared;
 
 namespace CarFuel.Facts
 {
@@ -30,6 +31,19 @@ namespace CarFuel.Facts
         public class CarMothods
         {
             [Fact]
+            public void NewFillUp_HasCurrentDateTime()
+            {
+                var c = new Car();
+                var now = DateTime.Now;
+
+                SystemTime.SetDateTime(now);
+                FillUp f = c.AddFillUp(1000, 4);
+                SystemTime.Reset();
+
+                f.Date.ShouldEqual(now);
+            }
+
+            [Fact]
             public void AddFirstFillupTest()
             {
                 Car c = new Car();
@@ -37,7 +51,7 @@ namespace CarFuel.Facts
 
                 f1.OdoMeter.ShouldEqual(1000);
                 f1.Liters.ShouldEqual(40d);
-                f1.getKmL().ShouldBeNull();
+                f1.KmL.ShouldBeNull();
                 c.FillUps.Count().ShouldEqual(1);
             }
 
@@ -49,21 +63,21 @@ namespace CarFuel.Facts
 
                 f1.OdoMeter.ShouldEqual(1000);
                 f1.Liters.ShouldEqual(40d);
-                f1.NextFillup.ShouldBeNull();
-                f1.getKmL().ShouldBeNull();
+                f1.NextFillUp.ShouldBeNull();
+                f1.KmL.ShouldBeNull();
 
                 FillUp f2 = c.AddFillUp(1600, 50d);
                 f2.OdoMeter.ShouldEqual(1600);
                 f2.Liters.ShouldEqual(50d);
-                f2.NextFillup.ShouldBeNull();
-                f2.getKmL().ShouldBeNull();
+                f2.NextFillUp.ShouldBeNull();
+                f2.KmL.ShouldBeNull();
 
                 c.FillUps.Count().ShouldEqual(2);
 
-                f1.getKmL().ShouldEqual(12d);
+                f1.KmL.ShouldEqual(12d);
 
                 //Assert.Same(f2, f1.NextFillup);
-                f1.NextFillup.ShouldBeSameAs(f2);
+                f1.NextFillUp.ShouldBeSameAs(f2);
             }
 
             [Fact]

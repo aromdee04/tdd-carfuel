@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CNX.Shared;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -30,13 +31,15 @@ namespace CarFuel.Models
                 Liters = Liters
             };
 
+            fu.Date = SystemTime.Now();
+
             FillUps.Add(fu);
 
             var count = FillUps.Count();
 
             if(FillUps.Count > 1)
             {
-                FillUps[count - 2].NextFillup = fu;
+                FillUps[count - 2].NextFillUp = fu;
             }
 
             return fu;

@@ -91,6 +91,10 @@
       <Project>{72C35F46-51DF-4B4D-B84E-8BBA8AE2A4C4}</Project>
       <Name>CarFuel.Services</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CNX.Shared\CNX.Shared.csproj">
+      <Project>{45F284B1-6A1A-417C-89C4-A22EF6CCF084}</Project>
+      <Name>CNX.Shared</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
