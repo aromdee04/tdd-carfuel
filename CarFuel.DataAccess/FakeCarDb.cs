@@ -11,6 +11,7 @@ namespace CarFuel.DataAccess
     {
 
         private ICollection<Car> cars;
+        public bool AddMethodsHasCalled { get; set; } = false;
 
         public FakeCarDb()
         {
@@ -20,6 +21,8 @@ namespace CarFuel.DataAccess
         public Car Add(Car item)
         {
             cars.Add(item);
+
+            AddMethodsHasCalled = true;
             return item;
         }
 

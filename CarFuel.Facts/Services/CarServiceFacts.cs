@@ -9,6 +9,7 @@ using CarFuel.Models;
 using CarFuel.Services;
 using CarFuel.DataAccess;
 using Xunit.Abstractions;
+using Moq;
 
 namespace CarFuel.Facts.Services
 {
@@ -16,9 +17,12 @@ namespace CarFuel.Facts.Services
     {
         public CarService CarService { get; set; }
 
+        public FakeCarDb Db { get; set; }
+
         public SharedService()
         {
-            CarService = new CarService(new FakeCarDb());
+            Db = new FakeCarDb();
+            CarService = new CarService(Db);
         }
     }
 
@@ -34,6 +38,7 @@ namespace CarFuel.Facts.Services
         public class AddCarMethod
         {
             private CarService s;
+            private FakeCarDb db;
 
             private ITestOutputHelper output;
 
@@ -42,6 +47,7 @@ namespace CarFuel.Facts.Services
                 
                 this.output = output;
                 s = service.CarService;
+                db = service.Db;
 
                 output.WriteLine("ctor");
             }
@@ -49,6 +55,13 @@ namespace CarFuel.Facts.Services
             [Fact]
             public void AddSingleCar()
             {
+                var mock = new Mock<ICarDb>();
+
+                mock.Setup(db => db.Add(It.IsAny<Car>()))
+                    .Returns((Car car) => car);
+
+                var service = new CarService(mock.Object);
+
                 output.WriteLine("AddSingleCar");
 
                 var c = new Car();
@@ -56,16 +69,23 @@ namespace CarFuel.Facts.Services
                 c.Model = "Jazz";
                 var userId = Guid.NewGuid();
 
-                var c2 = s.AddCar(c, userId);
+                //db.AddMethodsHasCalled = false;
+
+                var c2 = service.AddCar(c, userId);
 
                 Assert.NotNull(c2);
                 Assert.Equal(c2.Make, c.Make);
                 Assert.Equal(c2.Model, c.Model);
 
-                var cars = s.GetCarsByMember(userId);
+                mock.Verify(db => db.Add(It.IsAny<Car>()), Times.Once);
 
-                Assert.Equal(1, cars.Count());
-                Assert.Contains(cars, x => x.OwnerId == userId);
+                //Assert.True(db.AddMethodsHasCalled); // เป็นทางที่ดีกว่า เนื่องจากไม่สนใจปัญหาของ GetCarsByMember(userId); 
+
+                //(2)
+                //var cars = s.GetCarsByMember(userId);
+
+                //Assert.Equal(1, cars.Count());
+                //Assert.Contains(cars, x => x.OwnerId == userId);
             }
 
             [Fact]
