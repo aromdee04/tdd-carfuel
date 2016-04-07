@@ -38,7 +38,7 @@ namespace CarFuel.Facts
                 fu.OdoMeter = 1600;
                 fu.Liters = 50d;
 
-                Assert.Null(fu.getKmL());        
+                Assert.Null(fu.KmL);        
             }
 
 
@@ -57,10 +57,10 @@ namespace CarFuel.Facts
                 f2.OdoMeter = 1600;
                 f2.Liters = 50d;
 
-                f1.NextFillup = f2;
+                f1.NextFillUp = f2;
 
-                f2.getKmL().ShouldBeNull();
-                f1.getKmL().ShouldEqual(12d);
+                f2.KmL.ShouldBeNull();
+                f1.KmL.ShouldEqual(12d);
             }
         }
             

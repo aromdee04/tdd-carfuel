@@ -6,22 +6,33 @@ using System.Threading.Tasks;
 
 namespace CarFuel.Models
 {
-    public class FillUp
-    {
+    public class FillUp {
+
+        public FillUp()
+        {
+
+        }
+
+        public FillUp(int odometer, double liters)
+        {
+            OdoMeter = odometer;
+            Liters = liters;
+        }
+
         public int Id { get; set; }
 
         public double Liters { get; set; }
-        public FillUp NextFillup { get; set; }
         public int OdoMeter { get; set; }
+        public DateTime Date { get; set; }
 
-        public double? getKmL()
+        public virtual FillUp NextFillUp { get; set; }
+
+        public double? KmL
         {
-
-            if (NextFillup == null) return null;
-
-            return (NextFillup.OdoMeter - OdoMeter) / NextFillup.Liters;
-            
-            //throw new NotImplementedException();
+            get {
+                if (NextFillUp == null) return null;
+                return (NextFillUp.OdoMeter - OdoMeter) / NextFillUp.Liters;
+            }
         }
     }
 }
